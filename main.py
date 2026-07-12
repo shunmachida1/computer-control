@@ -3,6 +3,7 @@ import mediapipe as mp
 import time
 import math
 import pyautogui
+import utils
 
 webcam = cv2.VideoCapture(0)
 
@@ -13,10 +14,6 @@ hands = mp_hands.Hands(
      min_detection_confidence = 0.7,
      min_tracking_confidence = 0.7
 )
-
-#FPS
-pTime = 0
-cTime = 0
 
 #Smoothing
 prev_x, prev_y = 0, 0
@@ -54,8 +51,7 @@ while True:
             thumbx = hand.landmark[4].x
             pinkyx = hand.landmark[20].x
 
-            clickdistance = math.sqrt((thumby - pinkyy)**2 + (thumbx - pinkyx)**2)
-
+            clickdistance = utils.find_distance(hand, 4, 20)
             #Click when Pinched
 
             if clickdistance < 0.07:
@@ -91,7 +87,7 @@ while True:
             middlex = hand.landmark[12].x
             middley = hand.landmark[12].y
 
-            scrolldistance = math.sqrt((thumby - middley)**2 + (thumbx - middlex)**2)
+            scrolldistance = utils.find_distance(hand, 12, 4)
 
             if scrolldistance < 0.08:
                 if not scrollmode:
@@ -103,14 +99,7 @@ while True:
                 scrollmode = False
 
 
-    #Show FPS
-
-    cTime = time.time()
-    fps = 1/(cTime - pTime)
-    pTime = cTime
-
-    cv2.putText(frame, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_COMPLEX, 3, (255, 0, 255), 2)
-
+    utils.show_fps(frame)
 
     cv2.imshow("bruh", frame)
 
