@@ -1,9 +1,8 @@
 import cv2
 import mediapipe as mp
-import time
-import math
 import pyautogui
 import utils
+import actions
 
 webcam = cv2.VideoCapture(0)
 
@@ -14,6 +13,8 @@ hands = mp_hands.Hands(
      min_detection_confidence = 0.7,
      min_tracking_confidence = 0.7
 )
+
+actions = actions.ActionDetector()
 
 #Smoothing
 prev_x, prev_y = 0, 0
@@ -39,29 +40,9 @@ while True:
 
     if results.multi_hand_landmarks:
         for hand in results.multi_hand_landmarks:
-            #for id, lm in enumerate(hand.landmark):
-                
-                #pw, ph = (w * lm.x), (h * lm.y)
-
-                #print(f"{id}: {int(pw)}, {int(ph)}")
-
-            thumby = hand.landmark[4].y
-            pinkyy = hand.landmark[20].y
-
-            thumbx = hand.landmark[4].x
-            pinkyx = hand.landmark[20].x
-
-            clickdistance = utils.find_distance(hand, 4, 20)
-            #Click when Pinched
-
-            if clickdistance < 0.07:
-                if not pinch_down:
-                    pyautogui.click()
-                    pinch_down = True
-                    print("Touching")
-
-            else:
-                pinch_down = False
+            
+            if actions.click():
+                pyautogui.click()
 
             #Track position of pointer
 

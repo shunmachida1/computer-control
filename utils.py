@@ -11,6 +11,7 @@ def find_distance(hand, id1, id2):
 
     return distance
 
+
 def show_fps(frame):
     pTime = 0
     cTime = 0
