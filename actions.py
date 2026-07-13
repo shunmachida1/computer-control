@@ -4,19 +4,43 @@ import utils
 
 class ActionDetector:
     def __init__(self):
-        pass
+        self.pinch_down = False
+        self.screen_x, self.screen_y = pyautogui.size()
 
-    def click(hand):
-
+    def detect_click(self, hand):
         clickdistance = utils.find_distance(hand, 4, 20)
 
         if clickdistance < 0.07:
-            if not pinch_down:
+            if not self.pinch_down:
                 pyautogui.click()
-                pinch_down = True
+                self.pinch_down = True
                 print("Touching")
 
             else:
-                pinch_down = False
-                
-        return False
+                self.pinch_down = False
+    
+    def move(self, hand):
+        pointer_x = hand.landmark[8].x
+        pointer_x = 1-pointer_x
+        pointer_y = hand.landmark[8].y
+
+        mouse_pos_x = pointer_x * self.screen_x
+        mouse_pos_y = pointer_y * self.screen_y
+
+        pyautogui.moveTo(int(mouse_pos_x), int(mouse_pos_y))
+
+    #Scrolling using middle and thumb modes
+
+    def detect_scroll(self, hand):
+        scrolldistance = utils.find_distance(hand, 12, 4)
+
+        if scrolldistance < 0.08:
+            if not scrollmode:
+                pyautogui.scroll(-50)
+                print("Scroll")
+                scrollmode = True
+
+        else:
+            scrollmode = False
+
+    
