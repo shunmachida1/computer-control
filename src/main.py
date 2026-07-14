@@ -52,7 +52,7 @@ while True:
             
     utils.show_fps(frame)
 
-    cv2.imshow("bruh", frame)
+    cv2.imshow("Action Controlled Computer", frame)
 
     if cv2.waitKey(10) & 0xff == ord('q'):
             break
