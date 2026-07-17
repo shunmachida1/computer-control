@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import utils
 from actions import ActionDetector
+import pyautogui
 
 webcam = cv2.VideoCapture(0)
 
@@ -38,9 +39,6 @@ while True:
             action.detect_scroll(hand)
             
             mp_draw.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS)
-
-            
-    utils.show_fps(frame)
 
     cv2.imshow("Action Controlled Computer", frame)
 
